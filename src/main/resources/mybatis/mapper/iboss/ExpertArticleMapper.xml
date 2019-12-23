@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zx.ibossapi.mapper.iboss.ExpertArticleMapper">
+    
+    <resultMap type="cn.com.zx.ibossapi.domain.ExpertArticle" id="ExpertArticleResult">
+        <result property="eaId"    column="eaId"    />
+        <result property="eaTitle"    column="eaTitle"    />
+        <result property="orgTg"    column="orgTg"    />
+        <result property="eaCode"    column="eaCode"    />
+        <result property="eiId"    column="eiId"    />
+        <result property="eiCode"    column="eiCode"    />
+        <result property="url"    column="url"    />
+        <result property="content"    column="content"    />
+        <result property="status"    column="status"    />
+        <result property="onLineStatus"    column="onLineStatus"    />
+        <result property="onLineTime"    column="onLineTime"    />
+        <result property="createUser"    column="createUser"    />
+        <result property="createTime"    column="createTime"    />
+        <result property="updateUser"    column="updateUser"    />
+        <result property="updateTime"    column="updateTime"    />
+        <result property="deptName"    column="deptName"    />
+        <result property="sign"    column="sign"    />
+        <result property="headerUrl"    column="headerUrl"    />
+    </resultMap>
+
+    <select id="selectExpertArticleList" resultMap="ExpertArticleResult">
+      select pea.eaId,pea.eaTitle,pea.url,pei.eiName eiId,sio.dept_name deptName from pro_expert_article pea
+      LEFT JOIN pro_expert_info pei on pea.eiId=pei.eiId  LEFT JOIN sys_inv_org sio on pei.deId=sio.org_id
+      where pea.`status`='0' and pea.onLineStatus='0' and pea.orgTg=#{orgTg}
+      ORDER BY pea.eaId DESC
+    </select>
+
+    <select id="selectExpertArticleListByParams" resultMap="ExpertArticleResult">
+        select * from pro_expert_article
+        <where>
+            <if test="eaTitle!= null and eaTitle!=''">
+                AND eaTitle LIKE  '%' #{eaTitle} '%'
+            </if>
+        </where>
+        ORDER BY createTime DESC
+    </select>
+
+    <select id="getExpertArticleInfo" parameterType="java.lang.String" resultMap="ExpertArticleResult">
+      select ea.eaId, ea.eaTitle,ea.url, ea.eaCode, ei.eiName eiId,ei.sign, ei.headerUrl,sio.dept_name deptName, ea.eiId eiCode, ea.content, ea.status ,
+         ea.onLineStatus , ea.onLineTime, ea.createUser, ea.createTime, ea.updateUser, ea.updateTime from pro_expert_article
+        ea left join pro_expert_info ei on ea.eiId=ei.eiId LEFT JOIN sys_inv_org sio on ei.deId=sio.org_id where ea.eaId = #{eaId}
+    </select>
+
+
+    <select id="selectCollectExpertArticleList" parameterType="java.lang.String" resultMap="ExpertArticleResult">
+      SELECT pea.eaId,pea.eaTitle,pea.url,pea.STATUS,pea.onLineStatus,pea.onLineTime,pea.createUser,pea.createTime,pea.updateUser,
+      pea.updateTime FROM pro_expert_article pea WHERE pea.eaId IN
+      <foreach collection="proIdList" open="(" close=")" separator="," index="index" item="proId">
+          #{proId}
+      </foreach>
+      ORDER BY pea.createTime DESC
+    </select>
+
+    <select id="getEaTitleById" parameterType="java.lang.String" resultType="java.lang.String">
+      select eaTitle from pro_expert_article where eaId=#{eaId};
+    </select>
+
+</mapper>

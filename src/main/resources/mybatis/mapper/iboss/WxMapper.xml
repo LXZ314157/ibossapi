@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zx.ibossapi.mapper.iboss.WxMapper">
+
+    <resultMap type="cn.com.zx.ibossapi.domain.WxUserInfo" id="WxUserInfoResult">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result property="country" jdbcType="VARCHAR"    column="country"    />
+        <result property="province" jdbcType="VARCHAR"    column="province"    />
+        <result property="city"  jdbcType="VARCHAR"   column="city"    />
+        <result property="openid" jdbcType="VARCHAR"    column="openid"    />
+        <result property="sex"  jdbcType="VARCHAR"   column="sex"    />
+        <result property="nickname"  jdbcType="VARCHAR"   column="nickname"    />
+        <result property="headimgurl"  jdbcType="VARCHAR"   column="headimgurl"    />
+        <result property="language"    column="language" jdbcType="VARCHAR"   />
+        <result property="createUser"  jdbcType="VARCHAR"  column="createUser"    />
+        <result property="createTime"  jdbcType="TIMESTAMP"  column="createTime"   />
+    </resultMap>
+
+    <insert id="insertUserInfo" parameterType="cn.com.zx.ibossapi.domain.WxUserInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into pro_wx_userinfo (country,province,city,openid,sex,nickname,headimgurl,createTime,status)
+        values (#{country},#{province},#{city},#{openid},#{sex},#{nickname},#{headimgurl},SYSDATE(),0);
+    </insert>
+
+    <select id="selectWxUserSaveCount" resultType="java.lang.Integer">
+        select count(1) from pro_wx_userinfo where openid= #{openid};
+    </select>
+
+    <select id="getUserCode" parameterType="java.lang.String" resultType="java.lang.String">
+      select userCode from pro_account_user where openid= #{openid};
+    </select>
+
+    <select id="getWxUserInfo" parameterType="java.lang.String" resultMap="WxUserInfoResult">
+        select * from pro_wx_userinfo where openid=#{openid};
+    </select>
+</mapper>

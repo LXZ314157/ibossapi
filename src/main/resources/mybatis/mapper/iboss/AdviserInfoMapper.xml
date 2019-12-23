@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zx.ibossapi.mapper.iboss.AdviserInfoMapper">
+
+    <resultMap type="cn.com.zx.ibossapi.domain.AdviserInfo" id="AdviserInfoResult">
+        <result property="aiId"    column="aiId"    />
+        <result property="aiName"    column="aiName"    />
+        <result property="aiCode"    column="aiCode"    />
+        <result property="sex"    column="sex"    />
+        <result property="age"    column="age"    />
+        <result property="sign"    column="sign"    />
+        <result property="wxCode"    column="wxCode"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="IDCard"    column="IDCard"    />
+        <result property="deId"    column="deId"    />
+        <result property="spclt"    column="spclt"    />
+        <result property="introduce"    column="introduce"    />
+        <result property="authSts"    column="authSts"    />
+        <result property="status"    column="status"    />
+        <result property="createUser"    column="createUser"    />
+        <result property="createTime"    column="createTime"    />
+        <result property="updateUser"    column="updateUser"    />
+        <result property="updateTime"    column="updateTime"    />
+    </resultMap>
+
+
+    <select id="selectFollowAdviserInfoList" parameterType="java.lang.String" resultMap="AdviserInfoResult">
+      select * from pro_adviser_info where aiId in (select fId from pro_account_follow where userCode=#{userCode} and fType=2);
+    </select>
+</mapper>

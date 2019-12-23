@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zx.ibossapi.mapper.iboss.AdvtMapper">
+    
+    <resultMap type="cn.com.zx.ibossapi.domain.Advt" id="AdvtResult">
+        <result property="adId"    column="adId"    />
+        <result property="title"    column="title"    />
+        <result property="content"    column="content"    />
+        <result property="imgUrl"    column="imgUrl"    />
+        <result property="orgTg"    column="orgTg"    />
+        <result property="orgId"    column="orgId"    />
+        <result property="price"    column="price"    />
+        <result property="startTime"    column="startTime"    />
+        <result property="endTime"    column="endTime"    />
+        <result property="onLineStatus"    column="onLineStatus"    />
+        <result property="createUser"    column="createUser"    />
+        <result property="createTime"    column="createTime"    />
+        <result property="updateUser"    column="updateUser"    />
+        <result property="updateTime"    column="updateTime"    />
+    </resultMap>
+	
+    <select id="selectAdvtList" resultMap="AdvtResult">
+        select adId,title,imgUrl from pro_advt where onLineStatus=0 and startTime &lt;= NOW()
+        and endTime &gt;= NOW() and imgUrl is not null and imgUrl !='' ORDER BY createTime asc LIMIT 5
+    </select>
+
+    <select id="getAdvtInfoByAdId" resultMap="AdvtResult">
+        select pa.adId,pa.title,pa.content,pa.imgUrl,sdd.dict_label orgTg,
+        sio.dept_name orgId,pa.price,pa.startTime,pa.endTime from pro_advt pa
+        LEFT JOIN sys_dict_data sdd on pa.orgTg=sdd.dict_value
+        LEFT JOIN sys_inv_org sio on pa.orgId=sio.org_id
+        where pa.adId=#{adId} and sdd.dict_type='sys_org_tp'
+    </select>
+</mapper>

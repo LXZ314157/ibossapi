@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zx.ibossapi.mapper.iboss.ExpertInfoMapper">
+
+    <resultMap type="cn.com.zx.ibossapi.domain.ExpertInfo" id="ExpertInfoResult">
+        <result property="eiId"    column="eiId"    />
+        <result property="eiName"    column="eiName"    />
+        <result property="eiCode"    column="eiCode"    />
+        <result property="sign"    column="sign"    />
+        <result property="wxCode"    column="wxCode"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="deId"    column="deId"    />
+        <result property="introduce"    column="introduce"    />
+        <result property="orgImgUrl"    column="orgImgUrl"    />
+        <result property="status"    column="status"    />
+        <result property="createUser"    column="createUser"    />
+        <result property="createTime"    column="createTime"    />
+        <result property="updateUser"    column="updateUser"    />
+        <result property="updateTime"    column="updateTime"    />
+    </resultMap>
+
+    <select id="selectExpertInfoList" resultMap="ExpertInfoResult">
+      select pei.eiId, pei.eiName, pei.sign,sio.dept_name deId from pro_expert_info pei LEFT JOIN sys_inv_org sio on pei.deId = sio.org_id
+      where pei.`status`='0' ORDER BY pei.createTime DESC
+    </select>
+
+    <select id="getExpertInfo" parameterType="java.lang.String" resultMap="ExpertInfoResult">
+      select pei.eiId, pei.eiName, pei.bodyUrl,pei.headerUrl,sio.imgUrl orgImgUrl,pei.eiCode, pei.sign, pei.wxCode, pei.mobile, pei.deId, pei.introduce,pei.`status` ,
+      pei.createUser, pei.createTime, pei.updateUser,pei.updateTime from pro_expert_info pei
+      LEFT JOIN sys_inv_org sio on pei.deId=sio.org_id where eiId = #{eiId}
+    </select>
+
+    <select id="selectFollowExpertInfoList" parameterType="java.lang.String" resultMap="ExpertInfoResult">
+      select pei.* from pro_expert_info pei LEFT JOIN pro_account_follow paf on pei.eiId = paf.fId
+      where paf.userCode= #{userCode} and paf.fType=1 order by paf.createTime desc
+    </select>
+
+</mapper>

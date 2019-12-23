@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zx.ibossapi.mapper.iboss.EducateCourseMapper">
+
+    <resultMap type="cn.com.zx.ibossapi.domain.EducateCourse" id="EducateCourseResult">
+        <result property="ecId"    column="ecId"    />
+        <result property="ecTitle"    column="ecTitle"    />
+        <result property="orgTg"    column="orgTg"    />
+        <result property="ecCode"    column="ecCode"    />
+        <result property="deId"    column="deId"    />
+        <result property="url"    column="url"    />
+        <result property="introduce"    column="introduce"    />
+        <result property="price"    column="price"    />
+        <result property="status"    column="status"    />
+        <result property="onLineStatus"    column="onLineStatus"    />
+        <result property="onLineTime"    column="onLineTime"    />
+        <result property="offLineTime"    column="offLineTime"    />
+        <result property="createUser"    column="createUser"    />
+        <result property="createTime"    column="createTime"    />
+        <result property="updateUser"    column="updateUser"    />
+        <result property="updateTime"    column="updateTime"    />
+    </resultMap>
+
+    <select id="selectEducateCourseList" resultMap="EducateCourseResult">
+       select pec.ecId, pec.ecTitle, pec.url,sio.dept_name deId,pec.price from pro_educate_course pec
+       LEFT JOIN sys_inv_org sio on pec.deId = sio.org_id where pec.`status`='0' and pec.onLineStatus='0'
+       and pec.orgTg=#{orgTg} ORDER BY pec.createTime DESC
+    </select>
+    
+    <select id="getEducateCourseInfo" parameterType="java.lang.String" resultMap="EducateCourseResult">
+       select ecId, ecTitle, ecCode,url, deId, introduce, price, `status`, `onLineStatus` , onLineTime, offLineTime, createUser, createTime, updateUser,
+        updateTime from pro_educate_course where ecId = #{ecId}
+    </select>
+
+    <select id="selectCollectEducateCourseList" parameterType="java.lang.String" resultMap="EducateCourseResult">
+      SELECT * FROM pro_educate_course where ecId in
+      <foreach collection="proIdList" open="(" close="" separator="," index="index" item="proId">
+          #{proId}
+      </foreach>
+      order by createTime desc
+    </select>
+</mapper>

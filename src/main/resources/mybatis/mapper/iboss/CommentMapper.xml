@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zx.ibossapi.mapper.iboss.CommentMapper">
+
+    <select id="getWxUserInfo" resultType="cn.com.zx.ibossapi.domain.WxUserInfo" parameterType="java.lang.String">
+        select openid,nickname,headimgurl from pro_wx_userinfo where openid=#{openid};
+    </select>
+
+</mapper>

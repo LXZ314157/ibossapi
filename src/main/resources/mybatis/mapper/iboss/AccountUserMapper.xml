@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zx.ibossapi.mapper.iboss.AccountUserMapper">
+
+    <select id="selectAccountUser" resultType="java.lang.Integer">
+      select count(1) from pro_account_user where userCode= #{userCode} and openid= #{openid};
+    </select>
+
+    <insert id="saveUserOper" parameterType="cn.com.zx.ibossapi.domain.UserOpr" useGeneratedKeys="true" keyProperty="id">
+        insert into pro_user_opr (userCode,oprType,proType,proId,createTime)
+        values(#{userCode},#{oprType},#{proType},#{proId},SYSDATE());
+    </insert>
+
+    <insert id="saveFollows" parameterType="cn.com.zx.ibossapi.domain.AccountFollow" useGeneratedKeys="true" keyProperty="afId">
+        insert into pro_account_follow (userCode,fId,fType,createTime) values(#{userCode},#{fId},#{fType},SYSDATE());
+    </insert>
+
+    <insert id="insertAccountUser" parameterType="cn.com.zx.ibossapi.domain.AccountUser" >
+        insert into pro_account_user (userCode,openid,createTime) values(#{userCode},#{openid},SYSDATE());
+    </insert>
+
+    <select id="selectProIds" resultType="java.lang.String">
+      select proId from pro_user_opr where userCode=#{userCode} and oprType=#{oprType} and proType=#{proType};
+    </select>
+
+    <select id="selectFollows" resultType="java.lang.Integer">
+      select count(1) from pro_account_follow where userCode= #{userCode} and fId= #{fId} and fType= #{fType} ;
+    </select>
+    
+    <delete id="updateUserOperProId" parameterType="cn.com.zx.ibossapi.domain.AccountCollection" >
+      update pro_user_opr set proId=#{proId},updateTime=SYSDATE()
+      where userCode=#{userCode} and oprType=#{oprType} and proType=#{proType}
+    </delete>
+
+    <delete id="cancelFollowsResult" parameterType="cn.com.zx.ibossapi.domain.AccountFollow" >
+      delete from pro_account_follow where userCode = #{ userCode } and fId=#{fId} and fType=#{fType};
+    </delete>
+
+    <insert id="insertSupportSum" parameterType="cn.com.zx.ibossapi.domain.SupportCount" useGeneratedKeys="true" keyProperty="stId">
+        insert into pro_support_count (sId,sType,sCount,createTime) values(#{sId},#{sType},#{sCount},SYSDATE());
+    </insert>
+
+    <update id="updateSupportSum">
+      update pro_support_count set sCount = #{sCount} where sType= #{sType} and sId= #{sId};
+    </update>
+
+    <insert id="saveCollectDataStatistical" parameterType="cn.com.zx.ibossapi.domain.DataStatistical" useGeneratedKeys="true" keyProperty="id">
+        insert into pro_data_statistical (proType,proId,collectNum) values(#{proType},#{proId},1);
+    </insert>
+
+    <insert id="saveSupportDataStatistical" parameterType="cn.com.zx.ibossapi.domain.DataStatistical" useGeneratedKeys="true" keyProperty="id">
+        insert into pro_data_statistical (proType,proId,supportNum) values(#{proType},#{proId},1);
+    </insert>
+
+    <insert id="saveReadDataStatistical" parameterType="cn.com.zx.ibossapi.domain.DataStatistical" useGeneratedKeys="true" keyProperty="id">
+        insert into pro_data_statistical (proType,proId,readNum) values(#{proType},#{proId},1);
+    </insert>
+
+    <update id="updateDataStatistical">
+        update pro_data_statistical set collectNum = collectNum -1 where proType = #{proType} and proId = #{proId};
+    </update>
+
+    <update id="addCollectDataStatistical">
+        update pro_data_statistical set collectNum = collectNum +1 where proType = #{proType} and proId = #{proId};
+    </update>
+
+    <update id="addSupportDataStatistical">
+        update pro_data_statistical set supportNum = supportNum +1 where proType = #{proType} and proId = #{proId};
+    </update>
+
+    <update id="addReadDataStatistical">
+        update pro_data_statistical set readNum = readNum +1 where proType = #{proType} and proId = #{proId};
+    </update>
+
+    <select id="selectDataStatistical" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+      select count(1) from  pro_data_statistical where proType = #{proType} and proId = #{proId};
+    </select>
+
+    <delete id="deleteCollects">
+        delete from pro_user_opr where userCode=#{userCode} and oprType=#{oprType} and proType=#{proType};
+    </delete>
+
+    <select id="getProIdAndReadNum" resultType="java.util.Map">
+      select proId,proType,readNum from pro_data_statistical
+    </select>
+
+</mapper>

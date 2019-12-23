@@ -1,0 +1,103 @@
+# 项目相关配置
+iboss:
+  # 每页数据量
+  pagesize: 5
+  #服务器根路径
+  serverRootPath: http://www.iboss.group/
+
+# 开发环境配置
+server:
+  servlet:
+    context-path: /
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 800
+    min-spare-threads: 30
+  port: 8081
+
+# 日志配置
+logging:
+  level:
+    cn.com.zx.ibossapi: debug
+    org.springframework: WARN
+    org.spring.springboot.dao: debug
+
+
+# Spring配置
+spring:
+  cache: false
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  # 文件上传
+  servlet:
+     multipart:
+       max-file-size:  30MB
+       max-request-size:  30MB
+
+  #多数据源配置
+  datasource:
+     #iboss系统
+     iboss:
+       username: root
+       password: 123!@#
+       jdbc-url: jdbc:mysql://47.102.211.70:3306/iboss?useUnicode=true&characterEncoding=UTF-8&characterSetResults=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+       driver-class-name: com.mysql.jdbc.Driver
+     #支付系统数
+     pay:
+       username: root
+       password: 123!@#
+       jdbc-url: jdbc:mysql://47.102.211.70:3306/pay?useUnicode=true&characterEncoding=UTF-8&characterSetResults=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+       driver-class-name: com.mysql.jdbc.Driver
+
+  #redis配置
+  redis:
+    database: 0
+    host: 47.102.211.70
+    timeout: 60000ms
+    port: 6379
+    password: ibossabc
+    jedis:
+      pool:
+        max-active: 1000 # 连接池最大连接数（使用负值表示没有限制）
+        max-idle: 100 # 连接池中的最大空闲连接
+        min-idle: -1 # 连接池最大阻塞等待时间（使用负值表示没有限制）
+  #mongodb配置
+  data:
+    mongodb:
+      database: iboss
+      host: 47.102.211.70
+      port: 27017
+      username: iboss
+      password: ibossabc
+  #rabbitmq配置
+  rabbitmq:
+    host: 47.102.211.70
+    username: iboss
+    password: ibossabc
+    port: 5672
+
+# MyBatis
+mybatis:
+    # 搜索指定包别名
+    typeAliasesPackage: cn.com.zx.project
+    # 配置mapper的扫描，找到所有的mapper.xml映射文件
+    mapperLocations: classpath:mybatis/**/*Mapper.xml
+    # 加载全局的配置文件
+    configLocation: classpath:mybatis/mybatis-config.xml
+
+# 微信配置
+wx:
+# 生产环境
+  appID: wx45b1235d1ed78c19
+  appsecret: 9dbcd2d0302c492d256e51e2c280f106
+
+  authConfig: GdVOOLD1CnYNBuKu
+  backUrl: http://www.iboss.group
+  secretKey: e10adc3949ba59abbe56e003r5yf883e
+
+
+# 开发测试
+#  appID: wx84754227500d48ca
+#  appsecret: a9cfab456abafd9e324765b2c677ea39
+#  backUrl: http://8w96ha.natappfree.cc

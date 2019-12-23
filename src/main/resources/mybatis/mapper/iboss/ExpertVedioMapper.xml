@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.zx.ibossapi.mapper.iboss.ExpertVedioMapper">
+
+    <resultMap type="cn.com.zx.ibossapi.domain.ExpertVedio" id="ExpertVedioResult">
+        <result property="evId"    column="evId"    />
+        <result property="evTitle"    column="evTitle"    />
+        <result property="orgTg"    column="orgTg"    />
+        <result property="evCode"    column="evCode"    />
+        <result property="eiId"    column="eiId"    />
+        <result property="url"    column="url"    />
+        <result property="eiCode"    column="eiCode"    />
+        <result property="introduce"    column="introduce"    />
+        <result property="status"    column="status"    />
+        <result property="onLineStatus"    column="onLineStatus"    />
+        <result property="onLineTime"    column="onLineTime"    />
+        <result property="createUser"    column="createUser"    />
+        <result property="createTime"    column="createTime"    />
+        <result property="updateUser"    column="updateUser"    />
+        <result property="updateTime"    column="updateTime"    />
+    </resultMap>
+
+    <select id="selectExpertVedioList" resultMap="ExpertVedioResult">
+      select ev.evId, ev.evTitle, ev.url, ei.eiName eiId,sio.dept_name deptName
+      from pro_expert_vedio ev left join pro_expert_info ei on ev.eiId=ei.eiId
+      LEFT JOIN sys_inv_org sio on ei.deId=sio.org_id
+      where ev.`status`='0' and ev.onLineStatus='0'  and ev.orgTg=#{orgTg} ORDER BY ev.createTime DESC
+    </select>
+
+
+    <select id="getExpertVedioInfo" resultType="java.lang.String" resultMap="ExpertVedioResult">
+      select ev.evId, ev.evTitle,ev.url, ev.evCode, ei.eiName eiId,ev.eiId eiCode,sio.dept_name deptName, ev.introduce,ev.status, ev.onLineStatus,
+        ev.onLineTime, ev.createUser, ev.createTime, ev.updateUser, ev.updateTime from pro_expert_vedio
+        ev left join pro_expert_info ei on ev.eiId=ei.eiId LEFT JOIN sys_inv_org sio on ei.deId=sio.org_id where ev.evId = #{evId}
+    </select>
+
+    <select id="selectCollectExperVideoList" parameterType="java.lang.String" resultMap="ExpertVedioResult">
+        SELECT * FROM pro_expert_vedio WHERE evId in
+        <foreach collection="proIdList" open="(" close=")" separator="," index="index" item="proId">
+            #{proId}
+        </foreach>
+         order by createTime desc
+    </select>
+
+
+</mapper>
